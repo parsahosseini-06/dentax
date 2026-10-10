@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-03T19:01:27.267031Z",
+  "title": "Design System: Dentax",
+  "extensions": {
+    "colorMeta": {
+      "forest-green": {
+        "role": "primary",
+        "displayName": "Forest Green",
+        "canonical": "#1f4d3f",
+        "tonalRamp": [
+          "#0b1c16",
+          "#14352b",
+          "#1f4d3f",
+          "#28604e",
+          "#4f8a74",
+          "#86b3a1",
+          "#bcd6cb",
+          "#e6f0eb"
+        ]
+      },
+      "lavender-mist": {
+        "role": "secondary",
+        "displayName": "Lavender Mist",
+        "canonical": "#e8e0f0",
+        "tonalRamp": [
+          "#3a2f4c",
+          "#5b4a78",
+          "#7f6aa0",
+          "#a592c4",
+          "#c3b4dc",
+          "#d9cde9",
+          "#e8e0f0",
+          "#f5f1f9"
+        ]
+      },
+      "off-white": {
+        "role": "neutral",
+        "displayName": "Off-White",
+        "canonical": "#faf9f7",
+        "tonalRamp": [
+          "#1a1815",
+          "#4a4540",
+          "#8f8982",
+          "#c4beb6",
+          "#e8e5e0",
+          "#efe7dc",
+          "#f5f1ea",
+          "#faf9f7"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headline only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hover-lift",
+        "value": "0 4px 8px rgba(0,0,0,0.08)",
+        "purpose": "Buttons on hover only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Default state and reveal easing."
+      },
+      {
+        "name": "ease-bento",
+        "value": "cubic-bezier(0.01,0.45,0.25,1)",
+        "purpose": "Doctor card expansion, 1000ms."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "900px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Soft lavender action button.",
+      "html": "<button class=\"ds-btn\">Request a visit</button>",
+      "css": ".ds-btn{background:#e8e0f0;color:#1a1815;border:1px solid #e8e0f0;border-radius:8px;padding:14px 28px;font:500 16px Inter,sans-serif;cursor:pointer;transition:background 250ms,transform 250ms}.ds-btn:hover{background:#dcd1e8;transform:translateY(-1px)}.ds-btn:focus-visible{outline:2px solid #1f4d3f;outline-offset:2px}"
+    },
+    {
+      "name": "CTA Button",
+      "kind": "button",
+      "refersTo": "button-cta",
+      "description": "Forest green main call to action.",
+      "html": "<button class=\"ds-cta\">Book a visit</button>",
+      "css": ".ds-cta{background:#1f4d3f;color:#faf9f7;border:0;border-radius:8px;padding:12px 24px;font:500 16px Inter,sans-serif;cursor:pointer;transition:background 250ms}.ds-cta:hover{background:#28604e}.ds-cta:focus-visible{outline:2px solid #1f4d3f;outline-offset:2px}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "button-primary",
+      "description": "Reservation form field.",
+      "html": "<input class=\"ds-input\" placeholder=\"Full name\">",
+      "css": ".ds-input{border:1px solid #8f8982;border-radius:8px;background:#faf9f7;padding:14px 16px;font:400 16px Inter,sans-serif;color:#1a1815}.ds-input:focus{outline:2px solid #1f4d3f;outline-offset:2px;border-color:#1f4d3f}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Unhurried Consulting Room",
+    "overview": "A well-lit private room where nobody is rushing you: off-white walls, air, one deep green for decisions, lavender and sand as soft surfaces.",
+    "keyCharacteristics": [
+      "Light serif display over plain sans body.",
+      "Off-white base, lavender and sand surfaces, one forest green accent.",
+      "Tall airy sections, stacked bands, footer revealed from underneath.",
+      "Slow eased motion, off under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The One Action Rule",
+        "body": "Forest green marks what the visitor can do or what matters most. Lavender and sand are only ever surfaces.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Purple-Text Rule",
+        "body": "Lavender is never used for text or thin lines.",
+        "section": "colors"
+      },
+      {
+        "name": "The Light-Serif Rule",
+        "body": "Display type stays at weight 300 with tight tracking.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-At-Rest Rule",
+        "body": "Nothing carries a shadow until it is interacted with.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep forest green for actions and emphasis, and lavender and sand for surfaces.",
+      "Do write specific, checkable copy.",
+      "Do respect reduced motion.",
+      "Do keep keyboard operation and visible focus on every custom control."
+    ],
+    "donts": [
+      "Don't use lavender for text, thin rules or large flat page fills.",
+      "Don't add urgency or outcome guarantees.",
+      "Don't split the hero blob into pieces.",
+      "Don't add shadows at rest or gradient text."
+    ]
+  }
+}
