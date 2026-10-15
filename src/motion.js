@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { digits } from './i18n.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -67,11 +68,12 @@ export function initMotion(root) {
     gsap.utils.toArray('[data-count]').forEach((el) => {
       const end = Number(el.dataset.count);
       const state = { v: 0 };
+      const show = () => { el.textContent = digits(state.v, document.documentElement.lang); }; // Persian digits on the Persian page
       gsap.to(state, {
         v: end, duration: 2.2, ease: 'power2.out', snap: { v: 1 },
         scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-        onStart: () => { el.textContent = '0'; },
-        onUpdate: () => { el.textContent = state.v; },
+        onStart: show,
+        onUpdate: show,
       });
     });
   }, root);

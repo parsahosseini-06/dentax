@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { testimonials } from './data.js';
 import { reduced } from './motion.js';
+import { useI18n } from './i18n.jsx';
 
 // [first item, direction (1 = up, -1 = down), seconds per loop]
 const COPIES = 3; // enough repeats that the column never runs out, even when the cards are short
@@ -50,13 +51,14 @@ function useTicker(boxRef) {
 }
 
 export default function Testimonials() {
+  const { t, r } = useI18n();
   const boxRef = useRef(null);
   useTicker(boxRef);
 
   return (
     <section className="testimonials">
       <div className="split-head" style={{ marginBottom: 48 }}>
-        <h2 className="h2-serif" style={{ maxWidth: 560 }}>What patients <em>tell us.</em></h2>
+        <h2 className="h2-serif" style={{ maxWidth: 560 }}>{r('What patients <em>tell us.</em>')}</h2>
       </div>
       <div className="dx-ticker" ref={boxRef}>
         {COLUMNS.map(([start], c) => {
@@ -64,10 +66,10 @@ export default function Testimonials() {
           return (
             <div key={c} className="dx-col-wrap">
               <div className="dx-col">
-                {Array.from({ length: COPIES }, () => items).flat().map((t, i) => (
+                {Array.from({ length: COPIES }, () => items).flat().map((x, i) => (
                   <figure key={i} className="quote" aria-hidden={i >= items.length ? 'true' : undefined}>
-                    <blockquote>{t.q}</blockquote>
-                    <figcaption><strong>{t.who}</strong><span>{t.tx}</span></figcaption>
+                    <blockquote>{t(x.q)}</blockquote>
+                    <figcaption><strong>{t(x.who)}</strong><span>{t(x.tx)}</span></figcaption>
                   </figure>
                 ))}
               </div>

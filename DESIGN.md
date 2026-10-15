@@ -159,6 +159,19 @@ Tiles expand on tap with a 1000ms `cubic-bezier(0.01, 0.45, 0.25, 1)` (fast star
 ### Footer
 Cream gradient, four link columns, small icon buttons (springing up on hover) and three softly blurred, grained waves in lavender, sage and deep green that breathe slowly.
 
+## Persian (fa) and right-to-left
+
+The site ships in English and Persian. A toggle (EN | فارسی) sits in the top corner of the hero, in the quick bar and in the phone menu; the choice is remembered in `localStorage` (`dentax:lang`) and sets `lang` and `dir` on `<html>`.
+
+**Persian font:** Vazirmatn (variable, self-hosted through `@fontsource-variable/vazirmatn`), weight 300 for headlines and 400-500 for text. It keeps the brand's light, quiet voice and is the most readable Persian face on screen for facts such as steps and hours. English visitors never download it. Persian uses one family at two weights instead of serif plus sans, since there is no Persian equivalent of a light editorial serif that stays this legible.
+
+### Named Rules
+**The No-Tracking Rule.** Arabic script joins its letters: no `letter-spacing`, no `text-transform`, no italic. Emphasis in Persian is the forest-green colour only.
+**The Mirror Rule.** Layout mirrors through logical properties and grid/flex order; only directional things flip (arrows, calendar chevrons, hover motion). Photos, the logotype and the before/after slider do not.
+**The Persian Numerals Rule.** Numbers are shown in Persian digits on the Persian page (`n()` in `src/i18n.jsx`); phone numbers and email addresses stay left to right.
+
+Translations live in `src/fa.js`, keyed by the exact English text.
+
 ## Do's and Don'ts
 
 ### Do:
