@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { useI18n } from './i18n.jsx';
 
 // Branded dropdown and date picker used in the hero booking bar.
 
@@ -21,6 +22,7 @@ function useDismiss(rootRef, open, close) {
 }
 
 export function Dropdown({ label, value, options, onChange, placeholder = 'Select', boxed, invalid }) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const root = useRef(null);
@@ -57,7 +59,7 @@ export function Dropdown({ label, value, options, onChange, placeholder = 'Selec
         onKeyDown={onKeyDown}
       >
         <span className="pick-label">{label}</span>
-        <span className={value ? 'pick-value' : 'pick-value empty'}>{value || placeholder}<Chevron open={open} /></span>
+        <span className={value ? 'pick-value' : 'pick-value empty'}>{t(value || placeholder)}<Chevron open={open} /></span>
       </button>
       {open && (
         <ul id={`${uid}-list`} className="pop list" role="listbox" aria-label={label}>
@@ -72,7 +74,7 @@ export function Dropdown({ label, value, options, onChange, placeholder = 'Selec
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => pick(o)}
             >
-              {o}
+              {t(o)}
               {o === value && (
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m2.75 7.25 2.75 2.75 5.75-6" /></svg>
               )}
@@ -87,9 +89,14 @@ export function Dropdown({ label, value, options, onChange, placeholder = 'Selec
 const pad = (n) => String(n).padStart(2, '0');
 const iso = (y, m, d) => `${y}-${pad(m + 1)}-${pad(d)}`;
 const parse = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
-const WEEK = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+// English calendars start on Monday; Persian ones on Saturday (ش ی د س چ پ ج).
+const WEEK = { en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], fa: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'] };
+const WEEK_START = { en: 1, fa: 6 }; // Date.getDay(): Monday = 1, Saturday = 6
 
 export function DatePicker({ label, value, min, onChange, placeholder = 'Select date', boxed, invalid }) {
+  const { t, n, lang, dir } = useI18n();
+  // Gregorian dates in both languages (what the booking system stores); only names and digits are localised.
+  const locale = lang === 'fa' ? 'fa-IR-u-ca-gregory' : 'en-US';
   const [open, setOpen] = useState(false);
   const [view, setView] = useState(() => parse(value || min));
   const [focusIso, setFocusIso] = useState(null);
@@ -105,7 +112,7 @@ export function DatePicker({ label, value, min, onChange, placeholder = 'Select 
 
   const y = view.getFullYear();
   const m = view.getMonth();
-  const lead = (new Date(y, m, 1).getDay() + 6) % 7; // week starts on Monday
+  const lead = (new Date(y, m, 1).getDay() - WEEK_START[lang] + 7) % 7;
   const days = new Date(y, m + 1, 0).getDate();
   const minDate = parse(min);
   const canPrev = new Date(y, m, 0) >= minDate;
@@ -120,7 +127,9 @@ export function DatePicker({ label, value, min, onChange, placeholder = 'Select 
   const pick = (s) => { onChange(s); close(true); };
 
   const onGridKey = (e) => {
-    const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+    // in a right-to-left grid the next day sits on the left, so the horizontal arrows swap
+    const h = dir === 'rtl' ? -1 : 1;
+    const step = { ArrowLeft: -h, ArrowRight: h, ArrowUp: -7, ArrowDown: 7 }[e.key];
     if (!step) return;
     e.preventDefault();
     const cur = parse(e.target.dataset.iso);
@@ -130,22 +139,23 @@ export function DatePicker({ label, value, min, onChange, placeholder = 'Select 
     setFocusIso(iso(next.getFullYear(), next.getMonth(), next.getDate()));
   };
 
-  const text = value && parse(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const text = value && parse(value).toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
 
   return (
     <div className={`pick${boxed ? ' boxed' : ''}${invalid ? ' invalid' : ''}`} ref={root}>
       <button ref={btn} type="button" className="pick-btn" aria-haspopup="dialog" aria-expanded={open} onClick={() => (open ? close(false) : show())}>
         <span className="pick-label">{label}</span>
-        <span className={text ? 'pick-value' : 'pick-value empty'}>{text || placeholder}<Chevron open={open} /></span>
+        <span className={text ? 'pick-value' : 'pick-value empty'}>{text || t(placeholder)}<Chevron open={open} /></span>
       </button>
       {open && (
-        <div className="pop cal" role="dialog" aria-label="Choose a date">
+        <div className="pop cal" role="dialog" aria-label={t('Choose a date')}>
           <div className="cal-head">
-            <button type="button" className="cal-nav" onClick={() => go(-1)} disabled={!canPrev} aria-label="Previous month">‹</button>
-            <div className="cal-title" aria-live="polite">{view.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
-            <button type="button" className="cal-nav" onClick={() => go(1)} aria-label="Next month">›</button>
+            {/* browsers do not mirror ‹ › themselves: earlier months are to the right in a right-to-left page */}
+            <button type="button" className="cal-nav" onClick={() => go(-1)} disabled={!canPrev} aria-label={t('Previous month')}>{dir === 'rtl' ? '›' : '‹'}</button>
+            <div className="cal-title" aria-live="polite">{view.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}</div>
+            <button type="button" className="cal-nav" onClick={() => go(1)} aria-label={t('Next month')}>{dir === 'rtl' ? '‹' : '›'}</button>
           </div>
-          <div className="cal-grid cal-week" aria-hidden="true">{WEEK.map((d) => <span key={d}>{d}</span>)}</div>
+          <div className="cal-grid cal-week" aria-hidden="true">{WEEK[lang].map((d) => <span key={d}>{d}</span>)}</div>
           <div className="cal-grid" onKeyDown={onGridKey}>
             {Array.from({ length: lead }, (_, i) => <span key={`b${i}`} />)}
             {Array.from({ length: days }, (_, i) => {
@@ -162,13 +172,13 @@ export function DatePicker({ label, value, min, onChange, placeholder = 'Select 
                   className={`day${s === value ? ' sel' : ''}${s === min ? ' today' : ''}`}
                   onClick={() => pick(s)}
                 >
-                  {i + 1}
+                  {n(i + 1)}
                 </button>
               );
             })}
           </div>
           <div className="cal-foot">
-            <button type="button" className="link-btn" onClick={() => pick('')} disabled={!value}>Clear</button>
+            <button type="button" className="link-btn" onClick={() => pick('')} disabled={!value}>{t('Clear')}</button>
           </div>
         </div>
       )}

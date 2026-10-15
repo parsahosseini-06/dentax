@@ -12,6 +12,8 @@ import clinic from './assets/img/clinic-interior.jpg';
 
 export { clinic };
 
+export const phone = '(555) 014-2290';
+
 export const today = new Date().toISOString().slice(0, 10);
 
 export const treatments = [
