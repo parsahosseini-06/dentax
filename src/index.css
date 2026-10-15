@@ -420,6 +420,8 @@ html[dir="rtl"] .nav nav { direction: rtl; }
 /* Language switch: the page slides a little toward its new reading side while it cross-fades (JS: choose() in i18n.jsx) */
 html { --vt-shift: 28px; }
 html[data-lang-to="en"] { --vt-shift: -28px; }
+html[data-calm] { --vt-shift: 0px; } /* reduced motion: fade only */
+html[data-calm]::view-transition-old(root), html[data-calm]::view-transition-new(root) { animation-duration: 350ms; }
 ::view-transition { background: var(--color-bg); }
 ::view-transition-group(root) { animation-duration: 700ms; animation-timing-function: var(--ease-soft); }
 ::view-transition-old(root) { animation: vt-out 700ms var(--ease-soft) both; }
