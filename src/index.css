@@ -33,7 +33,7 @@ button { font: inherit; color: inherit; }
 /* hero */
 .hero { position: relative; overflow: clip; background: var(--color-primary); padding: 32px var(--pad-x); display: flex; flex-direction: column; }
 .nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-size: 14px; color: var(--color-text-secondary); }
-.nav nav { display: flex; gap: 32px; flex-wrap: wrap; margin-inline: auto 32px; }
+.nav nav { display: flex; gap: 32px; flex-wrap: wrap; margin: 0 32px 0 auto; }
 .nav .wordmark { color: var(--color-text-primary); }
 .hero > :not(.hero-orb) { position: relative; z-index: 1; }
 /* the canvas is 30% larger than the blob (--orb) so nothing is clipped at its edges */
@@ -377,13 +377,13 @@ html.menu-open { overflow: hidden; }
 /* language toggle: EN | فارسی (kept left to right in both languages, so it does not jump when the page flips) */
 .nav-end { display: flex; align-items: center; gap: 12px; }
 .lang { display: inline-flex; padding: 2px; border: 1px solid rgba(26,24,21,.2); border-radius: 8px; }
-.lang button { border: 0; background: none; padding: 7px 11px; border-radius: 6px; cursor: pointer; font: 500 13px/1 var(--font-family-primary); color: var(--color-text-secondary); transition: background 250ms var(--ease), color 250ms var(--ease); }
+.lang button { border: 0; background: none; width: 56px; padding: 7px 0; text-align: center; border-radius: 6px; cursor: pointer; font: 500 13px/1 var(--font-family-primary); color: var(--color-text-secondary); transition: background 250ms var(--ease), color 250ms var(--ease); }
 .lang button[aria-pressed="false"]:hover { color: var(--color-text-primary); }
 .lang button[aria-pressed="true"] { background: var(--color-text-primary); color: var(--color-bg); }
 /* the Persian label uses the system font until the page itself is Persian, so English visitors never download the Persian font */
 .lang [lang="fa"] { font-family: Tahoma, 'Geeza Pro', 'Segoe UI', sans-serif; }
 .menu-top .lang { margin-inline: auto 12px; }
-@media (pointer: coarse) { .lang button { min-width: 44px; min-height: 44px; } }
+@media (pointer: coarse) { .lang button { min-height: 44px; } }
 @media (max-width: 640px) { .bar .lang { display: none; } } /* the quick bar is full on phones: the toggle lives in the menu there */
 
 /* Persian (fa) and right-to-left. Layout mirrors through logical properties and grid/flex order;
@@ -411,3 +411,19 @@ html[lang="fa"] :is(.eyebrow, .label-mauve, .label-sm, .ba-tag, .quote figcaptio
 html[lang="fa"] .dx-name { font-size: 24px; }
 html[lang="fa"] .dx-name-lg { font-size: 32px; }
 @media (max-width: 560px) { html[lang="fa"] .dx-name, html[lang="fa"] .dx-name-lg { font-size: 24px; } }
+
+/* The header keeps one physical layout in both languages (logo left, language toggle right), so the toggle never
+   moves when the page flips; only the words inside it read in their own direction. */
+.nav, .bar, .menu-top { direction: ltr; }
+html[dir="rtl"] .nav nav { direction: rtl; }
+
+/* Language switch: the page slides a little toward its new reading side while it cross-fades (JS: choose() in i18n.jsx) */
+html { --vt-shift: 28px; }
+html[data-lang-to="en"] { --vt-shift: -28px; }
+::view-transition { background: var(--color-bg); }
+::view-transition-group(root) { animation-duration: 700ms; animation-timing-function: var(--ease-soft); }
+::view-transition-old(root) { animation: vt-out 700ms var(--ease-soft) both; }
+::view-transition-new(root) { animation: vt-in 700ms var(--ease-soft) both; }
+@keyframes vt-out { to { opacity: 0; transform: translateX(var(--vt-shift)); } }
+@keyframes vt-in { from { opacity: 0; transform: translateX(calc(var(--vt-shift) * -1)); } }
+::view-transition-group(lang-toggle) { animation-duration: 0s; } /* no motion for the toggle itself */
