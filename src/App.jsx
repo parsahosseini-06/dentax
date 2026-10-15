@@ -198,9 +198,9 @@ function StickyBar() {
     <nav className={show ? 'bar show' : 'bar'} aria-label={t('Quick actions')}>
       <a href="#top" className="wordmark" lang="en">Dentax</a>
       <div className="bar-actions">
-        <LangToggle />
         <a href="tel:+15550142290" className="bar-tel"><span className="bar-tel-num" dir="ltr">{n(phone)}</span><span className="bar-tel-short">{t('Call')}</span></a>
         <a href="#reserve" className="bar-cta">{t('Book a visit')}</a>
+        <LangToggle />
         <Menu />
       </div>
     </nav>
