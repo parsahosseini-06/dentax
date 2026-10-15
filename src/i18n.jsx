@@ -40,13 +40,14 @@ export function LangProvider({ children }) {
       if (next === 'fa') await Promise.race([document.fonts.load("400 1em 'Vazirmatn Variable'", 'دنتکس'), new Promise((res) => setTimeout(res, 800))]).catch(() => {});
       try { localStorage.setItem(KEY, next); } catch { /* private mode: the choice just will not persist */ }
       const apply = () => flushSync(() => setLang(next));
-      if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return apply();
+      if (!document.startViewTransition) return apply();
 
       // keep what the visitor is reading in place: the two languages have different page heights
       const root = document.documentElement;
       const anchor = [...document.querySelectorAll('main > section')].find((el) => el.getBoundingClientRect().bottom > innerHeight * 0.3);
       const top = anchor?.getBoundingClientRect().top;
       root.dataset.langTo = next;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) root.dataset.calm = ''; // reduced motion: a plain short fade, no sliding
       toggle?.style.setProperty('view-transition-name', 'lang-toggle'); // excluded from the page animation, so it stays put
       const vt = document.startViewTransition(() => {
         apply();
@@ -56,6 +57,7 @@ export function LangProvider({ children }) {
       return vt.finished.catch(() => {}).finally(() => {
         toggle?.style.removeProperty('view-transition-name');
         delete root.dataset.langTo;
+        delete root.dataset.calm;
       });
     };
     return { lang, dir: lang === 'fa' ? 'rtl' : 'ltr', t, r, n: (x) => digits(x, lang), setLang: choose };

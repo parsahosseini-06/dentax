@@ -9,6 +9,12 @@ import tooth from './assets/img/tooth-closeup.jpg';
 import texture from './assets/img/texture-soft.jpg';
 import pediatric from './assets/img/pediatric-visit.jpg';
 import clinic from './assets/img/clinic-interior.jpg';
+import alignersBefore from './assets/img/ba-aligners-before.webp';
+import alignersAfter from './assets/img/ba-aligners-after.webp';
+import whiteningBefore from './assets/img/ba-whitening-before.webp';
+import whiteningAfter from './assets/img/ba-whitening-after.webp';
+import veneersBefore from './assets/img/ba-veneers-before.webp';
+import veneersAfter from './assets/img/ba-veneers-after.webp';
 
 export { clinic };
 
@@ -23,11 +29,11 @@ export const treatments = [
   { name: 'Pediatric care', dark: true, img: pediatric, alt: 'A dentist talking with a smiling child in the treatment chair', desc: 'Check-ups and treatment for children from their first teeth. Appointments are short, we explain everything in simple words, and parents are welcome in the room.', bg: '#1f4d3f' },
 ];
 
-// Replace `before` / `after` with imported photos (same framing for both) to show real results.
+// Same framing for both photos of a case. Replace these with real patients' photos (shared with written consent).
 export const cases = [
-  { name: 'Clear aligners', note: 'Eleven months of clear aligner treatment.' },
-  { name: 'Whitening', note: 'Two in-clinic whitening sessions.' },
-  { name: 'Veneers', note: 'Four porcelain veneers on the upper front teeth.' },
+  { name: 'Clear aligners', note: 'Eleven months of clear aligner treatment.', before: alignersBefore, after: alignersAfter },
+  { name: 'Whitening', note: 'Two in-clinic whitening sessions.', before: whiteningBefore, after: whiteningAfter },
+  { name: 'Veneers', note: 'Four porcelain veneers on the upper front teeth.', before: veneersBefore, after: veneersAfter },
 ];
 
 export const steps = [

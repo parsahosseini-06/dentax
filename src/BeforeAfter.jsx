@@ -8,7 +8,7 @@ function Slider({ item }) {
   const { t } = useI18n();
   const [pos, setPos] = useState(50);
   const layer = (src, label, cls) => (src
-    ? <img className="ba-img" src={src} alt="" draggable="false" />
+    ? <img className="ba-img" src={src} alt="" draggable="false" loading="lazy" decoding="async" />
     : <div className={`ba-ph ${cls}`}>{t(`[ ${label} photo ]`)}</div>);
 
   // dir="ltr": the slider is a physical control (the range input, the clip and the handle must agree on
@@ -48,13 +48,15 @@ export default function BeforeAfter() {
         <h2 className="h2-serif" style={{ maxWidth: 560 }}>{r('Before and <em>after.</em>')}</h2>
         <p className="lede-sm" style={{ maxWidth: 360 }}>{t("Drag the line to compare. Photos are shared with each patient's written consent and are not retouched. Results vary.")}</p>
       </div>
-      <div className="ba-tabs" role="group" aria-label={t('Choose a treatment')}>
-        {cases.map((c, k) => (
-          <button key={c.name} type="button" className={k === i ? 'ba-tab on' : 'ba-tab'} aria-pressed={k === i} onClick={() => setI(k)}>{t(c.name)}</button>
-        ))}
+      <div className="ba-stage">
+        <div className="ba-tabs" role="group" aria-label={t('Choose a treatment')}>
+          {cases.map((c, k) => (
+            <button key={c.name} type="button" className={k === i ? 'ba-tab on' : 'ba-tab'} aria-pressed={k === i} onClick={() => setI(k)}>{t(c.name)}</button>
+          ))}
+        </div>
+        <Slider key={i} item={cases[i]} />
+        <p className="small ba-note">{t(cases[i].note)}</p>
       </div>
-      <Slider key={i} item={cases[i]} />
-      <p className="small ba-note">{t(cases[i].note)}</p>
     </section>
   );
 }
